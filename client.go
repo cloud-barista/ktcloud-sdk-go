@@ -156,46 +156,12 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 		json.Unmarshal(body, &decodedResponse)
 		return decodedResponse, nil
 
-
-	case "listProjects":
-		var decodedResponse ListProjectsResponse
-		json.Unmarshal(body, &decodedResponse)
-		return decodedResponse, nil
-
-	case "listVolumes":
-		var decodedResponse ListVolumesResponse
-		json.Unmarshal(body, &decodedResponse)
-		return decodedResponse, nil
-
-	// Template
-	case "createTemplate":
-		var decodedResponse CreateTemplateResponse
-		json.Unmarshal(body, &decodedResponse)
-		return decodedResponse, nil
-
-	case "listTemplates":
-		var decodedResponse ListTemplatesResponse
-		json.Unmarshal(body, &decodedResponse)
-		return decodedResponse, nil
-
-
-	case "listDiskOfferings":
-		var decodedResponse ListDiskOfferingsResponse
-		json.Unmarshal(body, &decodedResponse)
-		return decodedResponse, nil
-
-	case "detachIso":
-		var decodedResponse DetachIsoResponse
-		json.Unmarshal(body, &decodedResponse)
-		return decodedResponse, nil
-
 	// AsyncJob
 	case "queryAsyncJobResult":
 		var decodedResponse QueryAsyncJobResultResponse
 		json.Unmarshal(body, &decodedResponse)
 		return decodedResponse, nil
 
-		
 	// Tag
 	case "createTags":
 		var decodedResponse CreateTagsResponse
