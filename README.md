@@ -18,27 +18,29 @@ import (
 )
 
 func main() {
+	
+	apiKey := os.Getenv("KTCLOUD_API_KEY")
+	if len(apiKey) == 0 {
+		fmt.Println("Failed to Find KTCLOUD_API_KEY, exiting")
+		os.Exit(1)
+	}
+	secretKey := os.Getenv("KTCLOUD_SECRET_KEY")
+	if len(secretKey) == 0 {
+		fmt.Println("Failed to Find KTCLOUD_SECRET_KEY, exiting")
+		os.Exit(1)
+	}
 
-	apiurl := os.Getenv("KTCLOUD_API_URL")
-	if len(apiurl) == 0 {
-		fmt.Println("Needed environment variable KTCLOUD_API_URL not found, exiting")
-		os.Exit(1)
-	}
-	apikey := os.Getenv("KTCLOUD_API_KEY")
-	if len(apikey) == 0 {
-		fmt.Println("Needed environment variable KTCLOUD_API_KEY not found, exiting")
-		os.Exit(1)
-	}
-	secretkey := os.Getenv("KTCLOUD_SECRET_KEY")
-	if len(secret) == 0 {
-		fmt.Println("Needed environment variable KTCLOUD_SECRET_KEY not found, exiting")
-		os.Exit(1)
+	// When Zone is "KOR-Seoul M2" => API v2, else API v1
+	if zoneID == "d7d0177e-6cda-404a-a46f-a5b356d2874e" {
+	apiUrl := "https://api.ucloudbiz.olleh.com/server/v2/client/api"
+	} else {
+	apiUrl := "https://api.ucloudbiz.olleh.com/server/v1/client/api"
 	}
 
 	cs := ktcloudsdk.KtCloudClient{}.New(apiurl, apikey, secretkey)
 
-	vmId := "19d2acfb-e281-4a13-8d62-e04ab501271d"
-	zoneId := "XXXXXX"
+	zoneId := "XXXXXXXXXXXXXXXXXXXX"
+	vmId := "XXXXXXXXXXXXXXXXXXXX"
 
 	vmListReqInfo := ktsdk.ListVMReqInfo{
 		ZoneId: 	zoneId,
