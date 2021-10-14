@@ -39,21 +39,21 @@ func main() {
 
 	//When Zoneid, Zonename
     // Id: (string) (len=36) "d7d0177e-6cda-404a-a46f-a5b356d2874e",
-    // Name: (string) (len=12) "KOR-Seoul M2"
+    // Name: (string) (len=12) "KOR-Seoul M2"	
 	apiurl := "https://api.ucloudbiz.olleh.com/server/v2/client/api"
 
 	if len(apiurl) == 0 {
 		fmt.Println("Needed environment variable KTCLOUD_API_URL not found, exiting")
 		os.Exit(1)
 	}
-	//apikey := os.Getenv("KTCLOUD_API_KEY")
-	apikey := "APXEhI_S7w3Iu4ZQbIvYaMkjG3M-yAHrkjDvyNVHsftLZfubWnt_vQpka_oLwxwfs7_LPtOJgQ54fK3ntjwB0Q"
+
+	apikey := os.Getenv("KTCLOUD_API_KEY")
 	if len(apikey) == 0 {
 		fmt.Println("Needed environment variable KTCLOUD_API_KEY not found, exiting")
 		os.Exit(1)
 	}
-	// secretkey := os.Getenv("KTCLOUD_SECRET_KEY")
-	secretkey := "CKVOVeVGOXGaqPTU8vAednP0Ui93ZgDbywAAgNS_3OLhDn1ezulSDo-0aEDmy4sgtdPbQO5PjpyJrVG2c6IHIQ"
+
+	secretkey := os.Getenv("KTCLOUD_SECRET_KEY")
 	if len(secretkey) == 0 {
 		fmt.Println("Needed environment variable KTCLOUD_SECRET_KEY not found, exiting")
 		os.Exit(1)
@@ -66,7 +66,7 @@ func main() {
 	//zoneid := "eceb5d65-6571-4696-875f-5a17949f3317"
 	response, err := cs.ListZones(true, "", "", "")
 	if err != nil {
-		fmt.Errorf("Error listing Zone: %s", err)
+		fmt.Errorf("Failed to Get the List of Zones: %s", err)
 		os.Exit(1)
 	}
 	
