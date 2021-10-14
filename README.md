@@ -37,7 +37,7 @@ func main() {
 	apiUrl := "https://api.ucloudbiz.olleh.com/server/v1/client/api"
 	}
 
-	cs := ktcloudsdk.KtCloudClient{}.New(apiurl, apikey, secretkey)
+	cs := ktcloudsdk.KtCloudClient{}.New(apiUrl, apiKey, secretKey)
 
 	zoneId := "XXXXXXXXXXXXXXXXXXXX"
 	vmId := "XXXXXXXXXXXXXXXXXXXX"
@@ -49,7 +49,7 @@ func main() {
 
 	response, err := cs.ListVirtualMachines(vmListReqInfo)
 	if err != nil {
-		fmt.Errorf("Error listing virtual machine: %s", err)
+		fmt.Errorf("Failed to Find the List of Virtual Machine: %s", err)
 		os.Exit(1)
 	}
 	
@@ -58,7 +58,7 @@ func main() {
 		state := response.Listvirtualmachinesresponse.Virtualmachine[0].State
 		fmt.Printf("%s has IP : %s and state : %s\n", vmid, ip, state)
 	} else {
-		fmt.Printf("No VM with UUID: %s found\n", vmid)
+		fmt.Printf("Failed to Find the VM with the ID: %s found\n", vmid)
 	}
 
 }
