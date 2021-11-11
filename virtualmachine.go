@@ -17,8 +17,8 @@ import (
 
 type DeployVMReqInfo struct {
 	ZoneId 				string
-	ServiceOfferingId 	string
-	TemplateId 			string
+	ServiceOfferingId 	string  // VMSpec ID  
+	TemplateId 			string  // VMImage ID
 	DiskOfferingId 		string
 	ProductCode 		string
 	VMHostName 			string
@@ -272,11 +272,11 @@ type Virtualmachine struct {
 	Haenable            bool          `json:"haenable"`
 	ZoneId              string        `json:"zoneid"`
 	ZoneName            string        `json:"zonename"`
-	TemplateId          string        `json:"templateid"`
+	TemplateId          string        `json:"templateid"`  // VMImage ID
 	TemplateName        string        `json:"templatename"`
 	TemplateDisplayText string        `json:"templatedisplaytext"`
 	PasswordEnabled     bool          `json:"passwordenabled"`
-	ServiceOfferingId   string        `json:"serviceofferingid"`
+	ServiceOfferingId   string        `json:"serviceofferingid"`  // VMSpec ID  
 	ServiceOfferingName string        `json:"serviceofferingname"`
 	CpuNumber           float64       `json:"cpunumber"`
 	CpuSpeed            float64       `json:"cpuspeed"`
@@ -285,10 +285,10 @@ type Virtualmachine struct {
 	RootDeviceId        float64       `json:"rootdeviceid"`
 	RootDeviceType      string        `json:"rootdevicetype"`
 	SecurityGroup       []interface{} `json:"securitygroup"`
-	Password      		string        `json:"password"`	
+	Password      		string        `json:"password"`	// KT Cloud API로는 지원하지 않는다고함.(Blank)
 	Nic                 []Nic         `json:"nic"`
 	Hypervisor          string        `json:"hypervisor"`
-	KeyPair             string        `json:"keypair"`	// ### Manual에는 없음.
+	KeyPair             string        `json:"keypair"`	// ### Manual에는 parameter가 없으나 response 값 존재
 	AffinityGroup       string        `json:"affinitygroup"`
 	IsDynamicallyScalable string      `json:"isdynamicallyscalable"` // VM의 cpu 와 memory 에 대한 Scale up/down을 지원하기 위한 tools 포함 여부
 	OsTypeId            string        `json:"ostypeid"`
