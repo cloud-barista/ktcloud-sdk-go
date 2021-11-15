@@ -48,6 +48,8 @@ func (c KtCloudClient) CreatePortForwardingRule(portForwardingRuleCreateReqInfo 
 
 	if portForwardingRuleCreateReqInfo.OpenFirewall {
 		params.Set("openfirewall", "true")
+	} else {
+		params.Set("openfirewall", "false")
 	}
 
 	// if portForwardingRuleCreateReqInfo.CidrList != "" {
