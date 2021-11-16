@@ -15,8 +15,7 @@ import (
 	"time"
 )
 
-// waitForAsyncJob simply blocks until the the asynchronous job has
-// executed or has timed out.
+// waitForAsyncJob simply blocks until the the asynchronous job has executed or has timed out.
 func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) error {
 	done := make(chan struct{})
 	defer close(done)
@@ -34,11 +33,11 @@ func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) erro
 				return
 			}
 
-			// Check status of the job we issued.
-			// 0 - pending / in progress, we continue
+			// Check status of the job
+			// 0 - pending / in progress, continue job
 			// 1 - succedded
 			// 2 - failed
-			// 3 - cancelled
+			// 3 - cancelled  //Not supports on KT Cloud
 			status := response.Queryasyncjobresultresponse.JobStatus
 			switch status {
 			case 1:
@@ -48,19 +47,19 @@ func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) erro
 				err := fmt.Errorf("WaitForAsyncJob failed")
 				result <- err
 				return
-			case 3:
-				err := fmt.Errorf("WaitForAsyncJob was cancelled")
-				result <- err
-				return
+			// case 3:
+			// 	err := fmt.Errorf("WaitForAsyncJob was cancelled")
+			// 	result <- err
+			// 	return
 			}
 
 			// Wait 3 seconds between requests
 			time.Sleep(3 * time.Second)
 
-			// Verify we shouldn't exit
+			// Verify whether we shouldn't exit or ...
 			select {
 			case <-done:
-				// We finished, so just exit the goroutine
+				// Finished, so just exit the goroutine
 				return
 			default:
 				// Keep going
@@ -78,8 +77,7 @@ func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) erro
 	}
 }
 
-// WaitForVirtualMachineState simply blocks until the virtual machine
-// is in the specified state.
+// WaitForVirtualMachineState simply blocks until the virtual machine is in the specified state.
 func (c KtCloudClient) WaitForVirtualMachineState(zoneId string, vmId string, wantedState string, timeOut time.Duration) error {
 
 	vmListReqInfo := ListVMReqInfo{
@@ -110,7 +108,7 @@ func (c KtCloudClient) WaitForVirtualMachineState(zoneId string, vmId string, wa
 			}
 
 			currentState := response.Listvirtualmachinesresponse.Virtualmachine[0].State
-			// check what the real state will be.
+			// Check what the real state will be.
 			log.Printf("current state: %s", currentState)
 			log.Printf("wanted state:  %s", wantedState)
 			if currentState == wantedState {
@@ -121,10 +119,10 @@ func (c KtCloudClient) WaitForVirtualMachineState(zoneId string, vmId string, wa
 			// Wait 3 seconds in between
 			time.Sleep(3 * time.Second)
 
-			// Verify we shouldn't exit
+			// Verify whether we shouldn't exit or ...
 			select {
 			case <-done:
-				// We finished, so just exit the goroutine
+				// Finished, so just exit the goroutine
 				return
 			default:
 				// Keep going

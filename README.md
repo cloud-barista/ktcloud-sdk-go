@@ -30,7 +30,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	// When Zone is "KOR-Seoul M2" => API v2, else API v1
+	// When Zone is "KOR-Seoul M2" => use API v2, else use API v1
 	if zoneID == "d7d0177e-6cda-404a-a46f-a5b356d2874e" {
 	apiUrl := "https://api.ucloudbiz.olleh.com/server/v2/client/api"
 	} else {
@@ -42,7 +42,7 @@ func main() {
 	zoneId := "XXXXXXXXXXXXXXXXXXXX"
 	vmId := "XXXXXXXXXXXXXXXXXXXX"
 
-	vmListReqInfo := ktsdk.ListVMReqInfo{
+	vmListReqInfo := ktcloudsdk.ListVMReqInfo{
 		ZoneId: 	zoneId,
 		VMId:       vmId,
 	}
