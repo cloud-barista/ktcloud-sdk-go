@@ -40,7 +40,7 @@ func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) erro
 			// 2 - Failed
 			// 3 - Cancelled  //Not supports on KT Cloud
 			status := response.Queryasyncjobresultresponse.JobStatus
-			log.Printf("The job status : %f", status)
+			log.Printf("The job status : %d", status)
 			switch status {
 			case 1:
 				result <- nil
@@ -81,7 +81,6 @@ func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) erro
 
 // WaitForVirtualMachineState simply blocks until the virtual machine is in the specified state.
 func (c KtCloudClient) WaitForVirtualMachineState(zoneId string, vmId string, wantedState string, timeOut time.Duration) error {
-
 	vmListReqInfo := ListVMReqInfo{
 		ZoneId: 	zoneId,
 		VMId: 		vmId,

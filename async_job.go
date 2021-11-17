@@ -19,9 +19,9 @@ type QueryAsyncJobResultResponse struct {
 		AccountId     string  `json:"accountid"`
 		UserId        string  `json:"userid"`
 		Cmd           string  `json:"cmd"`
-		JobStatus     float64 `json:"jobstatus"`
-		JobProcStatus float64 `json:"jobprocstatus"`
-		JobResultCode float64 `json:"jobresultcode"`
+		JobStatus     int 	  `json:"jobstatus"`
+		JobProcStatus int 	  `json:"jobprocstatus"`
+		JobResultCode int	  `json:"jobresultcode"`
 		JobResultType string  `json:"jobresulttype"`
 		State 		  string  `json:"state"`
 
