@@ -16,6 +16,7 @@ import (
 )
 
 // Blocks until the the asynchronous job has executed or has timed out.
+// time.Duration unit => 1 nanosecond.  timeOut * 1,000,000,000 => 1 second
 func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) error {
 	done := make(chan struct{})
 	defer close(done)
@@ -68,7 +69,7 @@ func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) erro
 		}
 	}()
 
-	log.Printf("Waiting for up to %d seconds for async job %s", timeOut.Seconds(), jobId)
+	log.Printf("Waiting for up to %f seconds for async job : %s", timeOut.Seconds(), jobId)
 	select {
 	case err := <-result:
 		return err
@@ -131,7 +132,7 @@ func (c KtCloudClient) WaitForVirtualMachineState(zoneId string, vmId string, wa
 		}
 	}()
 
-	log.Printf("Waiting for up to %d seconds for Virtual Machine state to converge", timeOut.Seconds())
+	log.Printf("Waiting for up to %f seconds for Virtual Machine state to converge", timeOut.Seconds())
 	select {
 	case err := <-result:
 		return err
