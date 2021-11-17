@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-// waitForAsyncJob simply blocks until the the asynchronous job has executed or has timed out.
+// Blocks until the the asynchronous job has executed or has timed out.
 func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) error {
 	done := make(chan struct{})
 	defer close(done)
@@ -26,7 +26,7 @@ func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) erro
 		for {
 			attempts += 1
 
-			log.Printf("Checking async job status... (attempt: %d)", attempts)
+			log.Printf("Checking the async job status... (attempt: %d)", attempts)
 			response, err := c.QueryAsyncJobResult(jobId)
 			if err != nil {
 				result <- err
@@ -34,17 +34,18 @@ func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) erro
 			}
 
 			// Check status of the job
-			// 0 - pending / in progress, continue job
-			// 1 - succedded
-			// 2 - failed
-			// 3 - cancelled  //Not supports on KT Cloud
+			// 0 - Pending / In progress, Continue job
+			// 1 - Succeeded
+			// 2 - Failed
+			// 3 - Cancelled  //Not supports on KT Cloud
 			status := response.Queryasyncjobresultresponse.JobStatus
+			log.Printf("The job status : %f", status)
 			switch status {
 			case 1:
 				result <- nil
 				return
 			case 2:
-				err := fmt.Errorf("WaitForAsyncJob failed")
+				err := fmt.Errorf("WaitForAsyncJob() failed")
 				result <- err
 				return
 			// case 3:
@@ -67,12 +68,12 @@ func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) erro
 		}
 	}()
 
-	log.Printf("Waiting for up to %d seconds for async job %s", timeOut, jobId)
+	log.Printf("Waiting for up to %d seconds for async job %s", timeOut.Seconds(), jobId)
 	select {
 	case err := <-result:
 		return err
 	case <-time.After(timeOut):
-		err := fmt.Errorf("Timeout while waiting to for async job to finish")
+		err := fmt.Errorf("Timeout while waiting to for the async job to finish")
 		return err
 	}
 }
@@ -94,7 +95,7 @@ func (c KtCloudClient) WaitForVirtualMachineState(zoneId string, vmId string, wa
 		for {
 			attempts += 1
 
-			log.Printf("Checking virtual machine state... (attempt: %d)", attempts)
+			log.Printf("Checking the virtual machine state... (attempt: %d)", attempts)
 			response, err := c.ListVirtualMachines(vmListReqInfo)
 			if err != nil {
 				result <- err
@@ -109,8 +110,8 @@ func (c KtCloudClient) WaitForVirtualMachineState(zoneId string, vmId string, wa
 
 			currentState := response.Listvirtualmachinesresponse.Virtualmachine[0].State
 			// Check what the real state will be.
-			log.Printf("current state: %s", currentState)
-			log.Printf("wanted state:  %s", wantedState)
+			log.Printf("Current state: %s", currentState)
+			log.Printf("Wanted state:  %s", wantedState)
 			if currentState == wantedState {
 				result <- nil
 				return
@@ -130,12 +131,12 @@ func (c KtCloudClient) WaitForVirtualMachineState(zoneId string, vmId string, wa
 		}
 	}()
 
-	log.Printf("Waiting for up to %d seconds for Virtual Machine state to converge", timeOut)
+	log.Printf("Waiting for up to %d seconds for Virtual Machine state to converge", timeOut.Seconds())
 	select {
 	case err := <-result:
 		return err
 	case <-time.After(timeOut):
-		err := fmt.Errorf("Timeout while waiting to for Virtual Machine to converge")
+		err := fmt.Errorf("Timeout while waiting to for the Virtual Machine to converge")
 		return err
 	}
 }
