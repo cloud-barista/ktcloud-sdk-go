@@ -17,7 +17,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -77,21 +77,19 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 	// Create the final URL before we issue the request
 	// For some reason KT Cloud refuses to accept '+' as a space character so we byte escape it instead.
 	url := c.BaseURL + "?" + s2 + "&signature=" + signature
-
-	log.Printf("### Calling : %s ", url)
+	// log.Printf("### Calling : %s ", url)
 
 	resp, err := client.Get(url)
 	if err != nil {
 		return nil, err
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
-
-	log.Printf("Response from KT Cloud: %d - %s", resp.StatusCode, body)
+	// log.Printf("Response from KT Cloud: %d - %s", resp.StatusCode, body)
 	if resp.StatusCode != 200 {
 		err = errors.New(fmt.Sprintf("Received HTTP client/server error from KT Cloud: %d - %s", resp.StatusCode, body))
 		return nil, err
