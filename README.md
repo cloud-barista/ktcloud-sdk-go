@@ -4,10 +4,10 @@ KT Cloud SDK Go
 Go SDK for KT Cloud G1/G2 Platform REST API.
 This Go SDK is being used for the KT Cloud Classic connection driver of [Cloud-Barista](https://github.com/cloud-barista).
 
-Example usage
+Example usage of the SDK
 -------------
 
-Showing the Gust OS and state of a Product Type(VM Image) :
+Showing the Guest OS and State of a Product Type(VM Image) :
 
 ```go
 package main
@@ -17,13 +17,12 @@ import (
 	"strings"
 	"os"
 	"errors"
-
 	ktsdk "github.com/cloud-barista/ktcloud-sdk-go"
 )
 
 func main() {
-	imgIdToGetInfo 	:= "87838094-af4f-449f-a2f4-f5b4b581eb29" // An Image ID on 'KOR-Seoul M' zone.
-	zoneId 			:= "95e2f517-d64a-4866-8585-5177c256f7c7" // KT Cloud 'KOR-Seoul M' zone ID
+	imgIdToGetInfo := "87838094-af4f-449f-a2f4-f5b4b581eb29" // An Image ID on 'KOR-Seoul M' zone.
+	zoneId := "95e2f517-d64a-4866-8585-5177c256f7c7" // KT Cloud 'KOR-Seoul M' zone ID
 
 	guestOS, imgStatus, err := GetVMImageInfo(imgIdToGetInfo, zoneId)
 	if err != nil {
@@ -82,8 +81,7 @@ func GetVMImageInfo(imageId string, zoneId string) (string, string, error) {
 	}
 }
 ```
-## Original source code of this ktcloud-sdk-go
-The original source code, Gopherstack is a CloudStack Go SDK.
-[https://github.com/mindjiver/gopherstack](https://github.com/mindjiver/gopherstack)
+## Original source code of ktcloud-sdk-go
+The original source code, [gopherstack](https://github.com/mindjiver/gopherstack) is a CloudStack Go SDK.
 
 < Original code Licensed under the MIT >
