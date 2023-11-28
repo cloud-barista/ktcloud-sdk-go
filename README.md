@@ -1,24 +1,39 @@
-KT Cloud SDK go
+KT Cloud SDK Go
 ===========
 
-KT Cloud API library written in Go. Tested towards KT Cloud.
+Go SDK for KT Cloud G1/G2 Platform REST API.
+This Go SDK is being used for the KT Cloud Classic connection driver of [Cloud-Barista](https://github.com/cloud-barista).
 
 Example usage
 -------------
 
-Showing the IP and state of a virtual machine:
+Showing the Gust OS and state of a Product Type(VM Image) :
 
 ```go
 package main
 
 import (
 	"fmt"
+	"strings"
 	"os"
-	ktcloudsdk "github.com/cloud-barista/ktcloud-sdk-go"
+	"errors"
+
+	ktsdk "github.com/cloud-barista/ktcloud-sdk-go"
 )
 
 func main() {
-	
+	imgIdToGetInfo 	:= "87838094-af4f-449f-a2f4-f5b4b581eb29" // An Image ID on 'KOR-Seoul M' zone.
+	zoneId 			:= "95e2f517-d64a-4866-8585-5177c256f7c7" // KT Cloud 'KOR-Seoul M' zone ID
+
+	guestOS, imgStatus, err := GetVMImageInfo(imgIdToGetInfo, zoneId)
+	if err != nil {
+		fmt.Errorf("Failed to Find the Image Info : [%v]", err)
+		os.Exit(1)
+	}
+	fmt.Printf("# Guest OS : [%s], Image Status : [%s] of the Image ID.\n", guestOS, imgStatus)
+}
+
+func GetVMImageInfo(imageId string, zoneId string) (string, string, error) {
 	apiKey := os.Getenv("KTCLOUD_API_KEY")
 	if len(apiKey) == 0 {
 		fmt.Println("Failed to Find KTCLOUD_API_KEY, exiting")
@@ -30,36 +45,45 @@ func main() {
 		os.Exit(1)
 	}
 
-	// When Zone is "KOR-Seoul M2" => use API v2, else use API v1
-	if zoneID == "d7d0177e-6cda-404a-a46f-a5b356d2874e" {
-	apiUrl := "https://api.ucloudbiz.olleh.com/server/v2/client/api"
+	// If KT Cloud Zone is 'KOR-Seoul M2' => use API v2, else use API v1.
+	var apiUrl string
+	if zoneId == "d7d0177e-6cda-404a-a46f-a5b356d2874e" { // 'KOR-Seoul M2' zone
+	apiUrl = "https://api.ucloudbiz.olleh.com/server/v2/client/api" // API v2
 	} else {
-	apiUrl := "https://api.ucloudbiz.olleh.com/server/v1/client/api"
+	apiUrl = "https://api.ucloudbiz.olleh.com/server/v1/client/api" // API v1
 	}
 
-	cs := ktcloudsdk.KtCloudClient{}.New(apiUrl, apiKey, secretKey)
+	// Always validate any SSL certificates in the chain
+	insecureskipverify := false
+	cs := ktsdk.KtCloudClient{}.New(apiUrl, apiKey, secretKey, insecureskipverify)
 
-	zoneId := "XXXXXXXXXXXXXXXXXXXX"
-	vmId := "XXXXXXXXXXXXXXXXXXXX"
-
-	vmListReqInfo := ktcloudsdk.ListVMReqInfo{
-		ZoneId: 	zoneId,
-		VMId:       vmId,
-	}
-
-	response, err := cs.ListVirtualMachines(vmListReqInfo)
+	result, err := cs.ListAvailableProductTypes(zoneId)
 	if err != nil {
-		fmt.Errorf("Failed to Find the List of Virtual Machine: %s", err)
-		os.Exit(1)
-	}
-	
-	if len(response.Listvirtualmachinesresponse.Virtualmachine) > 0 {
-		ip := response.Listvirtualmachinesresponse.Virtualmachine[0].Nic[0].Ipaddress
-		state := response.Listvirtualmachinesresponse.Virtualmachine[0].State
-		fmt.Printf("%s has IP : %s and state : %s\n", vmid, ip, state)
-	} else {
-		fmt.Printf("Failed to Find the VM with the ID: %s found\n", vmid)
+		return "", "", fmt.Errorf("Failed to Find the List of Product Types : [%v]", err)
 	}
 
+	if len(result.Listavailableproducttypesresponse.ProductTypes) < 1 {
+		return "", "", errors.New("Failed to Get Product Type List!!")
+	} else {
+		var guestOS string
+		var imgStatus string
+		for _, productType := range result.Listavailableproducttypesresponse.ProductTypes {
+			if strings.EqualFold(productType.TemplateId, imageId) {	
+				guestOS 	= productType.TemplateDesc
+				imgStatus 	= productType.ProductState
+				break
+			}
+		}
+		if !strings.EqualFold(guestOS, "") {
+			return guestOS, imgStatus, nil		
+		} else {
+			return "", "", errors.New("Failed to Find the Product Types in the Zone!!")
+		}
+	}
 }
 ```
+## Original source code of this ktcloud-sdk-go
+The original source code, Gopherstack is a CloudStack Go SDK.
+[https://github.com/mindjiver/gopherstack](https://github.com/mindjiver/gopherstack)
+
+< Original code Licensed under the MIT >
