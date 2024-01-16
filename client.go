@@ -89,7 +89,8 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 	if err != nil {
 		return nil, err
 	}
-	// log.Printf("Response from KT Cloud: %d - %s", resp.StatusCode, body)
+
+	log.Printf("\n# Response from KT Cloud: %d - %s", resp.StatusCode, body)
 	if resp.StatusCode != 200 {
 		err = errors.New(fmt.Sprintf("Received HTTP client/server error from KT Cloud: %d - %s", resp.StatusCode, body))
 		return nil, err
@@ -117,7 +118,7 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 		json.Unmarshal(body, &decodedResponse)
 		return decodedResponse, nil
 
-    // Server(VirtualMachine)
+		// Server(VirtualMachine)
 	case "deployVirtualMachine":
 		var decodedResponse DeployVirtualMachineResponse
 		json.Unmarshal(body, &decodedResponse)
@@ -127,7 +128,7 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 		var decodedResponse DestroyVirtualMachineResponse
 		json.Unmarshal(body, &decodedResponse)
 		return decodedResponse, nil
-	
+
 	case "startVirtualMachine":
 		var decodedResponse StartVirtualMachineResponse
 		json.Unmarshal(body, &decodedResponse)
@@ -182,7 +183,7 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 		json.Unmarshal(body, &decodedResponse)
 		return decodedResponse, nil
 
-	//Firewallrule
+	// Firewallrule
 	case "createFirewallRule":
 		var decodedResponse CreateFirewallRuleResponse
 		json.Unmarshal(body, &decodedResponse)
@@ -196,9 +197,9 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 	case "deleteFirewallRule":
 		var decodedResponse DeleteFirewallRuleResponse
 		json.Unmarshal(body, &decodedResponse)
-		return decodedResponse, nil		
+		return decodedResponse, nil
 
-	//Public IP
+	// Public IP
 	case "associateIpAddress":
 		var decodedResponse AssociateIpAddressResponse
 		json.Unmarshal(body, &decodedResponse)
@@ -214,7 +215,7 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 		json.Unmarshal(body, &decodedResponse)
 		return decodedResponse, nil
 
-	//PortForwarding Rule	
+	// PortForwarding Rule
 	case "createPortForwardingRule":
 		var decodedResponse CreatePortForwardingRuleResponse
 		json.Unmarshal(body, &decodedResponse)
@@ -230,6 +231,37 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 		json.Unmarshal(body, &decodedResponse)
 		return decodedResponse, nil
 
+	// Disk Volume
+	case "createVolume":
+		var decodedResponse CreateVolumeResponse
+		json.Unmarshal(body, &decodedResponse)
+		return decodedResponse, nil
+
+	case "listVolumes":
+		var decodedResponse ListVolumesResponse
+		json.Unmarshal(body, &decodedResponse)
+		return decodedResponse, nil
+	
+	case "resizeVolume":
+		var decodedResponse ResizeVolumeResponse
+		json.Unmarshal(body, &decodedResponse)
+		return decodedResponse, nil
+
+	case "deleteVolume":
+		var decodedResponse DeleteVolumeResponse
+		json.Unmarshal(body, &decodedResponse)
+		return decodedResponse, nil
+
+	case "attachVolume":
+		var decodedResponse AttachVolumeResponse
+		json.Unmarshal(body, &decodedResponse)
+		return decodedResponse, nil
+
+	case "detachVolume":
+		var decodedResponse DetachVolumeResponse
+		json.Unmarshal(body, &decodedResponse)
+		return decodedResponse, nil
+	
 	}
 
 	// only reached with unknown request
