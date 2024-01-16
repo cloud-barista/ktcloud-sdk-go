@@ -38,7 +38,6 @@ func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) erro
 			// 0 - Pending / In progress, Continue job
 			// 1 - Succeeded
 			// 2 - Failed
-			// 3 - Cancelled  //Not supports on KT Cloud
 			status := response.Queryasyncjobresultresponse.JobStatus
 			log.Printf("The job status : %d", status)
 			switch status {
@@ -49,10 +48,6 @@ func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) erro
 				err := fmt.Errorf("WaitForAsyncJob() failed")
 				result <- err
 				return
-			// case 3:
-			// 	err := fmt.Errorf("WaitForAsyncJob was cancelled")
-			// 	result <- err
-			// 	return
 			}
 
 			// Wait 3 seconds between requests
