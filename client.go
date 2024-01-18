@@ -77,7 +77,7 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 	// Create the final URL before we issue the request
 	// For some reason KT Cloud refuses to accept '+' as a space character so we byte escape it instead.
 	url := c.BaseURL + "?" + s2 + "&signature=" + signature
-	// log.Printf("### Calling : %s ", url)
+	// log.Printf("\n\n### Request URI : %s\n\n", url)	// For Testing
 
 	resp, err := client.Get(url)
 	if err != nil {
@@ -89,8 +89,7 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 	if err != nil {
 		return nil, err
 	}
-
-	log.Printf("\n# Response from KT Cloud: %d - %s", resp.StatusCode, body)
+	// log.Printf("\n\n### Response from KT Cloud: %d, %s\n\n", resp.StatusCode, body)	// For Testing
 	if resp.StatusCode != 200 {
 		err = errors.New(fmt.Sprintf("Received HTTP client/server error from KT Cloud: %d - %s", resp.StatusCode, body))
 		return nil, err
@@ -102,7 +101,7 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 		log.Printf("Unknown request %s", request)
 
 	// SSH Key
-	case "createSSHKeyPair":
+	case "createSSHKeyPair": // Request Command according to KT Cloud API doc.
 		var decodedResponse CreateSshKeyPairResponse
 		json.Unmarshal(body, &decodedResponse)
 		return decodedResponse, nil
@@ -111,14 +110,14 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 		var decodedResponse ListSshKeyPairsResponse
 		json.Unmarshal(body, &decodedResponse)
 		return decodedResponse, nil
-		//~~~ keypairs res... 에서 중간 s자 주의
+		// Caution!!) When list ~, ~ KeyPair's'
 
 	case "deleteSSHKeyPair":
 		var decodedResponse DeleteSshKeyPairResponse
 		json.Unmarshal(body, &decodedResponse)
 		return decodedResponse, nil
 
-		// Server(VirtualMachine)
+	// Virtual Machine (Server)
 	case "deployVirtualMachine":
 		var decodedResponse DeployVirtualMachineResponse
 		json.Unmarshal(body, &decodedResponse)
@@ -261,7 +260,33 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 		var decodedResponse DetachVolumeResponse
 		json.Unmarshal(body, &decodedResponse)
 		return decodedResponse, nil
-	
+
+	// Load Balancer
+	case "createLoadBalancer": // Request Command according to KT Cloud API doc.
+		var decodedResponse CreateNLBResponse
+		json.Unmarshal(body, &decodedResponse)
+		return decodedResponse, nil
+
+	case "listLoadBalancers":
+		var decodedResponse ListNLBsResponse
+		json.Unmarshal(body, &decodedResponse)
+		return decodedResponse, nil
+
+	case "deleteLoadBalancer":
+		var decodedResponse DeleteNLBResponse
+		json.Unmarshal(body, &decodedResponse)
+		return decodedResponse, nil
+
+	case "addLoadBalancerWebServer":
+		var decodedResponse AddNLBVMResponse
+		json.Unmarshal(body, &decodedResponse)
+		return decodedResponse, nil
+
+	case "listLoadBalancerWebServers":
+		var decodedResponse ListNLBVMsResponse
+		json.Unmarshal(body, &decodedResponse)
+		return decodedResponse, nil
+
 	}
 
 	// only reached with unknown request
