@@ -65,43 +65,43 @@ type DetachVolumeReqInfo struct {
 
 // # Create a Disk Volume
 // DiskOfferingId : https://cloud.kt.com/docs/open-api-guide/g/computing/disk-volume
-func (c KtCloudClient) CreateVolume(volumeCreateReqInfo CreateVolumeReqInfo) (CreateVolumeResponse, error) {
+func (c KtCloudClient) CreateVolume(req CreateVolumeReqInfo) (CreateVolumeResponse, error) {
 	var resp CreateVolumeResponse
 	params := url.Values{}
-	params.Set("name", volumeCreateReqInfo.Name)
-	params.Set("diskofferingid", volumeCreateReqInfo.DiskOfferingId)
-	params.Set("zoneid", volumeCreateReqInfo.ZoneId)
+	params.Set("name", req.Name)
+	params.Set("diskofferingid", req.DiskOfferingId)
+	params.Set("zoneid", req.ZoneId)
 
-	if volumeCreateReqInfo.UsagePlanType != "" {
-		params.Set("usageplantype", volumeCreateReqInfo.UsagePlanType)
+	if req.UsagePlanType != "" {
+		params.Set("usageplantype", req.UsagePlanType)
 	}
 
-	if volumeCreateReqInfo.Account != "" {
-		params.Set("account", volumeCreateReqInfo.Account)
+	if req.Account != "" {
+		params.Set("account", req.Account)
 	}
 
-	if volumeCreateReqInfo.DomainId != "" {
-		params.Set("domainid", volumeCreateReqInfo.DomainId)
+	if req.DomainId != "" {
+		params.Set("domainid", req.DomainId)
 	}
 
-	if volumeCreateReqInfo.Size != "" {
-		params.Set("size", volumeCreateReqInfo.Size)
+	if req.Size != "" {
+		params.Set("size", req.Size)
 	}
 
-	if volumeCreateReqInfo.SnapshotId != "" {
-		params.Set("snapshotid", volumeCreateReqInfo.SnapshotId)
+	if req.SnapshotId != "" {
+		params.Set("snapshotid", req.SnapshotId)
 	}
 
-	if volumeCreateReqInfo.VMId != "" {
-		params.Set("virtualmachineid", volumeCreateReqInfo.VMId)
+	if req.VMId != "" {
+		params.Set("virtualmachineid", req.VMId)
 	}
 
-	if volumeCreateReqInfo.ProductCode != "" {
-		params.Set("productcode", volumeCreateReqInfo.ProductCode)
+	if req.ProductCode != "" {
+		params.Set("productcode", req.ProductCode)
 	}
 
-	if volumeCreateReqInfo.IOPS != "" {
-		params.Set("iops", volumeCreateReqInfo.IOPS)
+	if req.IOPS != "" {
+		params.Set("iops", req.IOPS)
 	}
 
 	response, err := NewRequest(c, "createVolume", params)
@@ -113,55 +113,55 @@ func (c KtCloudClient) CreateVolume(volumeCreateReqInfo CreateVolumeReqInfo) (Cr
 }
 
 // # List Disk Volumes
-func (c KtCloudClient) ListVolumes(volumeListReqInfo ListVolumeReqInfo) (ListVolumesResponse, error) {
+func (c KtCloudClient) ListVolumes(req ListVolumeReqInfo) (ListVolumesResponse, error) {
 	var resp ListVolumesResponse
 	params := url.Values{}
 
-	if volumeListReqInfo.Account != "" {
-		params.Set("account", volumeListReqInfo.Account)
+	if req.Account != "" {
+		params.Set("account", req.Account)
 	}
 
-	if volumeListReqInfo.DomainId != "" {
-		params.Set("domainid", volumeListReqInfo.DomainId)
+	if req.DomainId != "" {
+		params.Set("domainid", req.DomainId)
 	}
 
-	if volumeListReqInfo.IsRecursive {
+	if req.IsRecursive {
 		params.Set("isrecursive", "true")
 	}
 
-	if volumeListReqInfo.ID != "" {
-		params.Set("id", volumeListReqInfo.ID)
+	if req.ID != "" {
+		params.Set("id", req.ID)
 	}
 
-	if volumeListReqInfo.Keyword != "" {
-		params.Set("keyword", volumeListReqInfo.Keyword)
+	if req.Keyword != "" {
+		params.Set("keyword", req.Keyword)
 	}
 
-	if volumeListReqInfo.Name != "" {
-		params.Set("name", volumeListReqInfo.Name)
+	if req.Name != "" {
+		params.Set("name", req.Name)
 	}
 
-	if volumeListReqInfo.Page != "" {
-		params.Set("page", volumeListReqInfo.Page)
+	if req.Page != "" {
+		params.Set("page", req.Page)
 	}
 
-	if volumeListReqInfo.PageSize != "" {
-		params.Set("pagesize", volumeListReqInfo.PageSize)
+	if req.PageSize != "" {
+		params.Set("pagesize", req.PageSize)
 	}
 
-	if volumeListReqInfo.Type != "" {
-		params.Set("type", volumeListReqInfo.Type)
+	if req.Type != "" {
+		params.Set("type", req.Type)
 	}
 
-	if volumeListReqInfo.VMId != "" {
-		params.Set("virtualmachineid", volumeListReqInfo.VMId)
+	if req.VMId != "" {
+		params.Set("virtualmachineid", req.VMId)
 	}
 
-	if volumeListReqInfo.ZoneId != "" {
-		params.Set("zoneid", volumeListReqInfo.ZoneId)
+	if req.ZoneId != "" {
+		params.Set("zoneid", req.ZoneId)
 	}
 
-	if volumeListReqInfo.Install {
+	if req.Install {
 		params.Set("install", "true")
 	}
 
@@ -174,14 +174,14 @@ func (c KtCloudClient) ListVolumes(volumeListReqInfo ListVolumeReqInfo) (ListVol
 }
 
 // # Resize(Change) Disk Volume Size (This is only for Bootalbe Disk of a VM.)
-func (c KtCloudClient) ResizeVolume(volumeResizeReqInfo ResizeVolumeReqInfo) (ResizeVolumeResponse, error) {
+func (c KtCloudClient) ResizeVolume(req ResizeVolumeReqInfo) (ResizeVolumeResponse, error) {
 	var resp ResizeVolumeResponse
 	params := url.Values{}
 
-	params.Set("id", volumeResizeReqInfo.ID) // Volume ID
-	params.Set("vmid", volumeResizeReqInfo.VMId)
-	params.Set("size", volumeResizeReqInfo.Size)
-	params.Set("isLinux", volumeResizeReqInfo.IsLinux)
+	params.Set("id", req.ID) // Volume ID
+	params.Set("vmid", req.VMId)
+	params.Set("size", req.Size)
+	params.Set("isLinux", req.IsLinux)
 
 	response, err := NewRequest(c, "resizeVolume", params)
 	if err != nil {
@@ -205,15 +205,15 @@ func (c KtCloudClient) DeleteVolume(id string) (DeleteVolumeResponse, error) {
 }
 
 // # Attach a Disk Volume to VM
-func (c KtCloudClient) AttachVolume(volumeAttachReqInfo AttachVolumeReqInfo) (AttachVolumeResponse, error) {
+func (c KtCloudClient) AttachVolume(req AttachVolumeReqInfo) (AttachVolumeResponse, error) {
 	var resp AttachVolumeResponse
 	params := url.Values{}
 	
-	params.Set("id", volumeAttachReqInfo.ID) // Volume ID
-	params.Set("virtualmachineid", volumeAttachReqInfo.VMId) // Not 'vmid' but 'virtualmachineid'
+	params.Set("id", req.ID) // Volume ID
+	params.Set("virtualmachineid", req.VMId) // Not 'vmid' but 'virtualmachineid'
 	
-	if volumeAttachReqInfo.DeviceId != "" {
-		params.Set("deviceid", volumeAttachReqInfo.DeviceId)
+	if req.DeviceId != "" {
+		params.Set("deviceid", req.DeviceId)
 	}
 
 	response, err := NewRequest(c, "attachVolume", params)
@@ -225,18 +225,18 @@ func (c KtCloudClient) AttachVolume(volumeAttachReqInfo AttachVolumeReqInfo) (At
 }
 
 // # Detach a Disk Volume from VM
-func (c KtCloudClient) DetachVolume(volumeDetachReqInfo DetachVolumeReqInfo) (DetachVolumeResponse, error) {
+func (c KtCloudClient) DetachVolume(req DetachVolumeReqInfo) (DetachVolumeResponse, error) {
 	var resp DetachVolumeResponse
 	params := url.Values{}
 
-	params.Set("id", volumeDetachReqInfo.ID) // Volume ID
+	params.Set("id", req.ID) // Volume ID
 
-	if volumeDetachReqInfo.VMId != "" {
-		params.Set("virtualmachineid", volumeDetachReqInfo.VMId) // Not 'vmid' but 'virtualmachineid'
+	if req.VMId != "" {
+		params.Set("virtualmachineid", req.VMId) // Not 'vmid' but 'virtualmachineid'
 	}
 
-	if volumeDetachReqInfo.DeviceId != "" {
-		params.Set("deviceid", volumeDetachReqInfo.DeviceId)
+	if req.DeviceId != "" {
+		params.Set("deviceid", req.DeviceId)
 	}
 
 	response, err := NewRequest(c, "detachVolume", params)
@@ -309,7 +309,7 @@ type ResizeVolumeResponse struct {
 
 type DeleteVolumeResponse struct {
 	Deletevolumeresponse struct {
-		Success string `json:"success"` // Successful deletion ('true' / 'false')
+		Success string `json:"success"` // 'string' type of value!! 'true' or 'false'
 	} `json:"deletevolumeresponse"`
 }
 
