@@ -6,6 +6,7 @@
 // KT Cloud SDK go
 //
 // by ETRI, 2021.07.
+// Updated by ETRI, 2024.01.
 
 package ktcloudsdk
 
@@ -284,6 +285,11 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 
 	case "listLoadBalancerWebServers":
 		var decodedResponse ListNLBVMsResponse
+		json.Unmarshal(body, &decodedResponse)
+		return decodedResponse, nil
+
+	case "removeLoadBalancerWebServer":
+		var decodedResponse RemoveNLBVMResponse
 		json.Unmarshal(body, &decodedResponse)
 		return decodedResponse, nil
 
