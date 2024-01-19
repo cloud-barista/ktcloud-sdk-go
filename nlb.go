@@ -18,7 +18,8 @@ type CreateNLBReqInfo struct {
 	Name             string `json:"name"`				// Required
 	ZoneId           string `json:"zoneid"`				// Required. Zone ID that has the 'ServiceIP'
 	NLBOption 		 string `json:"loadbalanceroption"`	// Required. roundrobin / leastconnection / leastresponse / sourceiphash / srcipsrcporthash
-	ServiceIP        string `json:"serviceip"`			// Required. KT Cloud Virtual IP. $$$ In case of an empty value(""), it is newly created.
+	ServiceIP        string `json:"serviceip"`			// Required. KT Cloud Virtual IP. 
+														// 'ServiceIP' : $$$ In case of an empty value(""), it is newly created.
 	ServicePort      string `json:"serviceport"`		// Required
 	ServiceType      string `json:"servicetype"`		// Required. NLB ServiceType : https / http / sslbridge / tcp / ftp
 	HealthCheckType  string `json:"healthchecktype"`	// Required. HealthCheckType : http / https / tcp
@@ -151,7 +152,7 @@ func (c KtCloudClient) AddNLBVM(req AddNLBVMReqInfo) (AddNLBVMResponse, error) {
 	return resp, err
 }
 
-// # List Load-Balancers
+// # List Load-Balancers VMs
 // $$$ Caution!!) After this method execution, there must be a second of time sleep.
 func (c KtCloudClient) ListNLBVMs(nlbId string) (ListNLBVMsResponse, error) {
 	var resp ListNLBVMsResponse	
@@ -167,7 +168,7 @@ func (c KtCloudClient) ListNLBVMs(nlbId string) (ListNLBVMsResponse, error) {
 	return resp, nil
 }
 
-// # Delete a Load-Balancer
+// # Delete a Load-Balancer VM
 func (c KtCloudClient) RemoveNLBVM(serviceId string) (RemoveNLBVMResponse, error) {
 	var resp RemoveNLBVMResponse
 	params := url.Values{}
