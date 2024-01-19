@@ -18,11 +18,12 @@ type CreateNLBReqInfo struct {
 	Name             string `json:"name"`				// Required
 	ZoneId           string `json:"zoneid"`				// Required. Zone ID that has the 'ServiceIP'
 	NLBOption 		 string `json:"loadbalanceroption"`	// Required. roundrobin / leastconnection / leastresponse / sourceiphash / srcipsrcporthash
-	ServiceIP        string `json:"serviceip"`			// Required. KT Cloud Virtual IP
+	ServiceIP        string `json:"serviceip"`			// Required. KT Cloud Virtual IP. 
+														// 'ServiceIP' : $$$ In case of an empty value(""), it is newly created.
 	ServicePort      string `json:"serviceport"`		// Required
-	ServiceType      string `json:"servicetype"`		// Required. NLB Service Type : https / http / sslbridge / tcp / ftp
-	HealthCheckType  string `json:"healthchecktype"`	// Required. Health CheckType : http / https / tcp
-	HealthCheckURL   string `json:"healthcheckurl"`		// Required. URL when the HealthCheckType is http or https.
+	ServiceType      string `json:"servicetype"`		// Required. NLB ServiceType : https / http / sslbridge / tcp / ftp
+	HealthCheckType  string `json:"healthchecktype"`	// Required. HealthCheckType : http / https / tcp
+	HealthCheckURL   string `json:"healthcheckurl"`		// Required. URL when the HealthCheckType is 'http' or 'https'.
 	CipherGroupName  string `json:"ciphergroupname"`	// Required when ServiceType is 'https'. Set CipherGroup Name
 	SSLv3        	 string `json:"sslv3"`				// Required when ServiceType is 'https'. Use SSLv3? : 'DISABLED' / 'ENABLED'
 	TLSv1        	 string `json:"tlsv1"`				// Required when ServiceType is 'https'. Use TLSv1? : 'DISABLED' / 'ENABLED'
@@ -151,7 +152,8 @@ func (c KtCloudClient) AddNLBVM(req AddNLBVMReqInfo) (AddNLBVMResponse, error) {
 	return resp, err
 }
 
-// # List Load-Balancers 
+// # List Load-Balancers VMs
+// $$$ Caution!!) After this method execution, there must be a second of time sleep.
 func (c KtCloudClient) ListNLBVMs(nlbId string) (ListNLBVMsResponse, error) {
 	var resp ListNLBVMsResponse	
 	params := url.Values{}
@@ -164,6 +166,21 @@ func (c KtCloudClient) ListNLBVMs(nlbId string) (ListNLBVMsResponse, error) {
 	}
 	resp = response.(ListNLBVMsResponse)
 	return resp, nil
+}
+
+// # Delete a Load-Balancer VM
+func (c KtCloudClient) RemoveNLBVM(serviceId string) (RemoveNLBVMResponse, error) {
+	var resp RemoveNLBVMResponse
+	params := url.Values{}
+
+	params.Set("serviceid", serviceId)
+
+	response, err := NewRequest(c, "removeLoadBalancerWebServer", params)
+	if err != nil {
+		return resp, err
+	}
+	resp = response.(RemoveNLBVMResponse)
+	return resp, err
 }
 
 type NLB struct {
@@ -209,7 +226,7 @@ type CreateNLBResponse struct {
 	} `json:"createLoadBalancerresponse"`
 }
 
-type ListNLBsResponse struct {   // Note) Plural 
+type ListNLBsResponse struct {   // Note) Plural
 	Listnlbsresponse struct {	 // Note) Plural
 		Count       		int 	`json:"count"`
 		NLB 				[]NLB 	`json:"loadbalancer"`
@@ -225,7 +242,7 @@ type DeleteNLBResponse struct {
 
 type AddNLBVMResponse struct {
 	Addnlbvmresponse struct {
-		ServiceId         	string `json:"serviceid"`
+		ServiceId         	int    `json:"serviceid"`
 		NLBId    			string `json:"loadbalancerid"`
 		VMId 			 	string `json:"virtualmachineid"`
 		IpAddress   	 	string `json:"ipaddress"`	// Public IP of VM added
@@ -246,9 +263,16 @@ type NLBVM struct {
 	RequestsRate        int    `json:"requestsrate"`
 }
 
-type ListNLBVMsResponse struct {
-	Listnlbvmsresponse struct {
+type ListNLBVMsResponse struct { // Note) Plural
+	Listnlbvmsresponse struct {  // Note) Plural
 		NLBVM 				[]NLBVM `json:"loadbalancerwebserver"`
 		Count       		int 	`json:"count"`
 	} `json:"listLoadBalancerWebServersresponse"`
+}
+
+type RemoveNLBVMResponse struct {
+	Removenlbvmresponse struct {
+		Success 			bool	`json:"success"` // 'bool' type of value (Not like DeleteVolumeResponse)
+		Displaytext 		string 	`json:"displaytext"`
+	} `json:"removeLoadbalancerWebServerresponse"`
 }
