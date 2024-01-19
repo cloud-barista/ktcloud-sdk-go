@@ -151,7 +151,8 @@ func (c KtCloudClient) AddNLBVM(req AddNLBVMReqInfo) (AddNLBVMResponse, error) {
 	return resp, err
 }
 
-// # List Load-Balancers 
+// # List Load-Balancers
+// $$$ Caution!!) After this method execution, there must be a second of time sleep.
 func (c KtCloudClient) ListNLBVMs(nlbId string) (ListNLBVMsResponse, error) {
 	var resp ListNLBVMsResponse	
 	params := url.Values{}
