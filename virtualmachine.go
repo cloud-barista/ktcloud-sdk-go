@@ -45,7 +45,6 @@ type ListVMReqInfo struct {
 // Deploys a Virtual Machine and returns it's id
 func (c KtCloudClient) DeployVirtualMachine(vmReqInfo DeployVMReqInfo) (DeployVirtualMachineResponse, error) {
 	var resp DeployVirtualMachineResponse
-
 	params := url.Values{}
 
 	params.Set("zoneid", vmReqInfo.ZoneId)
@@ -55,59 +54,45 @@ func (c KtCloudClient) DeployVirtualMachine(vmReqInfo DeployVMReqInfo) (DeployVi
 	if vmReqInfo.DiskOfferingId != "" {
 		params.Set("diskofferingid", vmReqInfo.DiskOfferingId)
 	}
-
 	if vmReqInfo.ProductCode != "" {
 		params.Set("productcode", vmReqInfo.ProductCode)
 	}
-
 	if vmReqInfo.VMHostName != "" {
 		params.Set("name", vmReqInfo.VMHostName)
 	}
-
 	if vmReqInfo.DisplayName != "" {
 		params.Set("displayname", vmReqInfo.DisplayName)
 	}
-
 	if vmReqInfo.UsagePlanType != "" {
 		params.Set("usageplantype", vmReqInfo.UsagePlanType)
 	}
-
 	if vmReqInfo.RunSysPrep {
 		params.Set("runsysprep", "true")
 	}
-
 	if vmReqInfo.Account != "" {
 		params.Set("account", vmReqInfo.Account)
 	}
-
 	if vmReqInfo.DomainId != "" {
 		params.Set("domainid", vmReqInfo.DomainId)
 	}
-
 	if vmReqInfo.Group != "" {
 		params.Set("group", vmReqInfo.Group)
 	}
-
 	if vmReqInfo.Hypervisor != "" {
 		params.Set("hypervisor", vmReqInfo.Hypervisor)
 	}
-
 	if vmReqInfo.KeyPair != "" {
 		params.Set("keypair", vmReqInfo.KeyPair)
 	}
-
 	if len(vmReqInfo.IPtoNetworkList) > 0 {
 		params.Set("iptonetworklist", strings.Join(vmReqInfo.IPtoNetworkList, ","))
 	}
-
 	if vmReqInfo.Keyboard != "" {
 		params.Set("keyboard", vmReqInfo.Keyboard)
 	}
-
 	if len(vmReqInfo.NetworkIds) > 0 {
 		params.Set("networkids", strings.Join(vmReqInfo.NetworkIds, ","))
 	}
-
 	if vmReqInfo.UserData != "" {
 		params.Set("userdata", base64.StdEncoding.EncodeToString([]byte(vmReqInfo.UserData)))
 	}
@@ -130,7 +115,7 @@ func (c KtCloudClient) StartVirtualMachine(vmId string) (StartVirtualMachineResp
 		return resp, err
 	}
 	resp = response.(StartVirtualMachineResponse)
-	return resp, err
+	return resp, nil
 }
 
 // Stops a Virtual Machine
@@ -143,7 +128,7 @@ func (c KtCloudClient) StopVirtualMachine(vmId string) (StopVirtualMachineRespon
 		return resp, err
 	}
 	resp = response.(StopVirtualMachineResponse)
-	return resp, err
+	return resp, nil
 }
 
 // Reboot a Virtual Machine
@@ -156,7 +141,7 @@ func (c KtCloudClient) RebootVirtualMachine(vmId string) (RebootVirtualMachineRe
 		return resp, err
 	}
 	resp = response.(RebootVirtualMachineResponse)
-	return resp, err
+	return resp, nil
 }
 
 // Destroys a Virtual Machine
@@ -164,7 +149,6 @@ func (c KtCloudClient) DestroyVirtualMachine(vmId string) (DestroyVirtualMachine
 	var resp DestroyVirtualMachineResponse
 	params := url.Values{}
 	params.Set("id", vmId)
-
 	response, err := NewRequest(c, "destroyVirtualMachine", params)
 	if err != nil {
 		return resp, err
@@ -180,7 +164,6 @@ func (c KtCloudClient) ListVirtualMachines(vmListReqInfo ListVMReqInfo) (ListVir
 	if vmListReqInfo.ZoneId != "" {
 		params.Set("zoneid", vmListReqInfo.ZoneId)
 	}
-
 	if vmListReqInfo.VMId != "" {
 		params.Set("id", vmListReqInfo.VMId)
 	}
@@ -190,14 +173,14 @@ func (c KtCloudClient) ListVirtualMachines(vmListReqInfo ListVMReqInfo) (ListVir
 		return resp, err
 	}
 	resp = response.(ListVirtualMachinesResponse)
-	return resp, err
+	return resp, nil
 }
 
 // KT Cloud > Computing > Server Management > 'Server : 부가 정보 변경'
 func (c KtCloudClient) UpdateVirtualMachine(vmId string, displayname string, haenable string) (UpdateVirtualMachineResponse, error) {
 	var resp UpdateVirtualMachineResponse
-
 	params := url.Values{}
+
 	params.Set("id", vmId)
 	params.Set("displayname", displayname)
 	params.Set("haenable", haenable)
@@ -207,7 +190,7 @@ func (c KtCloudClient) UpdateVirtualMachine(vmId string, displayname string, hae
 		return resp, err
 	}
 	resp = response.(UpdateVirtualMachineResponse)
-	return resp, err
+	return resp, nil
 }
 
 type DeployVirtualMachineResponse struct {
@@ -291,7 +274,7 @@ type Virtualmachine struct {
 	KeyPair             string        `json:"keypair"`	// ### Manual에는 parameter가 없으나 response 값 존재
 	AffinityGroup       string        `json:"affinitygroup"`
 	IsDynamicallyScalable string      `json:"isdynamicallyscalable"` // VM의 cpu 와 memory 에 대한 Scale up/down을 지원하기 위한 tools 포함 여부
-	OsTypeId            string        `json:"ostypeid"`
+	OsTypeId            int       	  `json:"ostypeid"`
 	Tags                []interface{} `json:"tags"`
 }
 

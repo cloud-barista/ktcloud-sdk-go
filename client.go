@@ -97,10 +97,6 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 	}
 
 	switch request {
-
-	default:
-		log.Printf("Unknown request %s", request)
-
 	// SSH Key
 	case "createSSHKeyPair": // Request Command according to KT Cloud API doc.
 		var decodedResponse CreateSshKeyPairResponse
@@ -293,6 +289,24 @@ func NewRequest(c KtCloudClient, request string, params url.Values) (interface{}
 		json.Unmarshal(body, &decodedResponse)
 		return decodedResponse, nil
 
+	// Template (Server Image)
+	case "createTemplate": // Request Command according to KT Cloud API doc.
+		var decodedResponse CreateTemplateResponse
+		json.Unmarshal(body, &decodedResponse)
+		return decodedResponse, nil
+
+	case "listTemplates":
+		var decodedResponse ListTemplatesResponse
+		json.Unmarshal(body, &decodedResponse)
+		return decodedResponse, nil
+
+	case "deleteTemplate":
+		var decodedResponse DeleteTemplateResponse
+		json.Unmarshal(body, &decodedResponse)
+		return decodedResponse, nil
+	
+	default:
+		log.Printf("Unknown request %s", request)
 	}
 
 	// only reached with unknown request
