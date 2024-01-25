@@ -75,31 +75,24 @@ func (c KtCloudClient) CreateVolume(req CreateVolumeReqInfo) (CreateVolumeRespon
 	if req.UsagePlanType != "" {
 		params.Set("usageplantype", req.UsagePlanType)
 	}
-
 	if req.Account != "" {
 		params.Set("account", req.Account)
 	}
-
 	if req.DomainId != "" {
 		params.Set("domainid", req.DomainId)
 	}
-
 	if req.Size != "" {
 		params.Set("size", req.Size)
 	}
-
 	if req.SnapshotId != "" {
 		params.Set("snapshotid", req.SnapshotId)
 	}
-
 	if req.VMId != "" {
 		params.Set("virtualmachineid", req.VMId)
 	}
-
 	if req.ProductCode != "" {
 		params.Set("productcode", req.ProductCode)
 	}
-
 	if req.IOPS != "" {
 		params.Set("iops", req.IOPS)
 	}
@@ -120,47 +113,36 @@ func (c KtCloudClient) ListVolumes(req ListVolumeReqInfo) (ListVolumesResponse, 
 	if req.Account != "" {
 		params.Set("account", req.Account)
 	}
-
 	if req.DomainId != "" {
 		params.Set("domainid", req.DomainId)
 	}
-
 	if req.IsRecursive {
 		params.Set("isrecursive", "true")
 	}
-
 	if req.ID != "" {
 		params.Set("id", req.ID)
 	}
-
 	if req.Keyword != "" {
 		params.Set("keyword", req.Keyword)
 	}
-
 	if req.Name != "" {
 		params.Set("name", req.Name)
 	}
-
 	if req.Page != "" {
 		params.Set("page", req.Page)
 	}
-
 	if req.PageSize != "" {
 		params.Set("pagesize", req.PageSize)
 	}
-
 	if req.Type != "" {
 		params.Set("type", req.Type)
 	}
-
 	if req.VMId != "" {
 		params.Set("virtualmachineid", req.VMId)
 	}
-
 	if req.ZoneId != "" {
 		params.Set("zoneid", req.ZoneId)
 	}
-
 	if req.Install {
 		params.Set("install", "true")
 	}
@@ -188,7 +170,7 @@ func (c KtCloudClient) ResizeVolume(req ResizeVolumeReqInfo) (ResizeVolumeRespon
 		return resp, err
 	}
 	resp = response.(ResizeVolumeResponse)
-	return resp, err
+	return resp, nil
 }
 
 // # Delete a Disk Volume
@@ -201,7 +183,7 @@ func (c KtCloudClient) DeleteVolume(id string) (DeleteVolumeResponse, error) {
 		return resp, err
 	}
 	resp = response.(DeleteVolumeResponse)
-	return resp, err
+	return resp, nil
 }
 
 // # Attach a Disk Volume to VM
@@ -221,7 +203,7 @@ func (c KtCloudClient) AttachVolume(req AttachVolumeReqInfo) (AttachVolumeRespon
 		return resp, err
 	}
 	resp = response.(AttachVolumeResponse)
-	return resp, err
+	return resp, nil
 }
 
 // # Detach a Disk Volume from VM
@@ -244,7 +226,7 @@ func (c KtCloudClient) DetachVolume(req DetachVolumeReqInfo) (DetachVolumeRespon
 		return resp, err
 	}
 	resp = response.(DetachVolumeResponse)
-	return resp, err
+	return resp, nil
 }
 
 type Volume struct {
