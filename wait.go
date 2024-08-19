@@ -45,7 +45,7 @@ func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) erro
 				result <- nil
 				return
 			case 2:
-				err := fmt.Errorf("WaitForAsyncJob() failed")
+				err := fmt.Errorf("WaitForAsyncJob() failed. : %s", response.Queryasyncjobresultresponse.JobResult.ErrorText)
 				result <- err
 				return
 			}

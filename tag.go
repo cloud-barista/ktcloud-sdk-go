@@ -15,24 +15,24 @@ import (
 	"strings"
 )
 
-type CreateTags struct {
-	ResourceIds  []string `json:"resourceids"`
+type CreateTagsReqInfo struct {
 	ResourceType string   `json:"resourcetype`
+	ResourceIds  []string `json:"resourceids"`
 	Tags         []TagArg `json:"tags`
 }
 
-type ListTags struct {
+type ListTagsReqInfo struct {
 	Account      string `json:"account"`
 	DomainId     string `json:"domainid"`
 	Key          string `json:"key"`
 	Value        string `json:"value`
-	ResourceIds  string `json:"resourceids"`
 	ResourceType string `json:"resourcetype`
+	ResourceIds  string `json:"resourceids"`
 }
 
-type DeleteTags struct {
-	ResourceIds  []string `json:"resourceids"`
+type DeleteTagsReqInfo struct {
 	ResourceType string   `json:"resourcetype`
+	ResourceIds  []string `json:"resourceids"`
 	Tags         []TagArg `json:"tags`
 }
 
@@ -42,7 +42,7 @@ type TagArg struct {
 }
 
 // Add tags to specified resources
-func (c KtCloudClient) CreateTags(options *CreateTags) (CreateTagsResponse, error) {
+func (c KtCloudClient) CreateTags(options *CreateTagsReqInfo) (CreateTagsResponse, error) {
 	var resp CreateTagsResponse
 	params := url.Values{}
 
@@ -63,7 +63,7 @@ func (c KtCloudClient) CreateTags(options *CreateTags) (CreateTagsResponse, erro
 }
 
 // Returns all items with a particular tag
-func (c KtCloudClient) ListTags(options *ListTags) (ListTagsResponse, error) {
+func (c KtCloudClient) ListTags(options *ListTagsReqInfo) (ListTagsResponse, error) {
 	var resp ListTagsResponse
 	params := url.Values{}
 
@@ -101,7 +101,7 @@ func (c KtCloudClient) ListTags(options *ListTags) (ListTagsResponse, error) {
 }
 
 // Remove tags from specified resources
-func (c KtCloudClient) DeleteTags(options *DeleteTags) (DeleteTagsResponse, error) {
+func (c KtCloudClient) DeleteTags(options *DeleteTagsReqInfo) (DeleteTagsResponse, error) {
 	var resp DeleteTagsResponse
 	params := url.Values{}
 
