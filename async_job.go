@@ -11,22 +11,26 @@ package ktcloudsdk
 
 import (
 	"net/url"
-	"encoding/json"
 )
+
+type JobResult struct {
+	ErrorCode int 	 `json:"errorcode"`
+	ErrorText string `json:"errortext"`
+}
 
 type QueryAsyncJobResultResponse struct {
 	Queryasyncjobresultresponse struct {
 		AccountId     	string  `json:"accountid"`
 		UserId        	string  `json:"userid"`
 		Cmd           	string  `json:"cmd"`
-		JobStatus     	int 	  `json:"jobstatus"`
-		JobProcStatus 	int 	  `json:"jobprocstatus"`
-		JobResultCode 	int	  `json:"jobresultcode"`
+		JobStatus     	int 	`json:"jobstatus"`
+		JobProcStatus 	int 	`json:"jobprocstatus"`
+		JobResultCode 	int	  	`json:"jobresultcode"`
 		JobResultType 	string  `json:"jobresulttype"`
 		State 		  	string  `json:"state"`
-		JobResult 		json.RawMessage `json:"jobresult"`
-		JobInstanceType string `json:"jobinstancetype"`
-		JobInstanceId 	string `json:"jobinstanceid"`
+		JobResult 		JobResult `json:"jobresult"`
+		JobInstanceType string 	`json:"jobinstancetype"`
+		JobInstanceId 	string 	`json:"jobinstanceid"`
 		Created       	string  `json:"created"`
 		JobId         	string  `json:"jobid"`
 	} `json:"queryasyncjobresultresponse"`
