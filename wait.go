@@ -11,9 +11,18 @@ package ktcloudsdk
 
 import (
 	"fmt"
-	"log"
 	"time"
+	"github.com/sirupsen/logrus"
+
+	cblog "github.com/cloud-barista/cb-log"
 )
+
+var cblogger *logrus.Logger
+
+func init() {
+	// cblog is a global variable.
+	cblogger = cblog.GetLogger("KT Cloud SDK Go")
+}
 
 // Blocks until the the asynchronous job has executed or has timed out.
 // time.Duration unit => 1 nanosecond.  timeOut * 1,000,000,000 => 1 second
@@ -27,7 +36,7 @@ func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) erro
 		for {
 			attempts += 1
 
-			log.Printf("Checking the async job status... (attempt: %d)", attempts)
+			cblogger.Infof("Checking the async job status... (attempt: %d)", attempts)
 			response, err := c.QueryAsyncJobResult(jobId)
 			if err != nil {
 				result <- err
@@ -39,7 +48,7 @@ func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) erro
 			// 1 - Succeeded
 			// 2 - Failed
 			status := response.Queryasyncjobresultresponse.JobStatus
-			log.Printf("The job status : %d", status)
+			cblogger.Infof("The job status : %d", status)
 			switch status {
 			case 1:
 				result <- nil
@@ -64,7 +73,7 @@ func (c KtCloudClient) WaitForAsyncJob(jobId string, timeOut time.Duration) erro
 		}
 	}()
 
-	log.Printf("# Waiting for up to %f seconds for async job : %s", timeOut.Seconds(), jobId)
+	cblogger.Infof("# Waiting for up to %f seconds for async job : %s", timeOut.Seconds(), jobId)
 	select {
 	case err := <-result:
 		return err
@@ -90,7 +99,7 @@ func (c KtCloudClient) WaitForVirtualMachineState(zoneId string, vmId string, wa
 		for {
 			attempts += 1
 
-			log.Printf("Checking the VM state... (attempt: %d)", attempts)
+			cblogger.Infof("Checking the VM state... (attempt: %d)", attempts)
 			response, err := c.ListVirtualMachines(vmListReqInfo)
 			if err != nil {
 				result <- err
@@ -105,8 +114,8 @@ func (c KtCloudClient) WaitForVirtualMachineState(zoneId string, vmId string, wa
 
 			currentState := response.Listvirtualmachinesresponse.Virtualmachine[0].State
 			// Check what the real state will be.
-			log.Printf("Current state: %s", currentState)
-			log.Printf("Wanted state:  %s", wantedState)
+			cblogger.Infof("Current state: %s", currentState)
+			cblogger.Infof("Wanted state:  %s", wantedState)
 			if currentState == wantedState {
 				result <- nil
 				return
@@ -126,7 +135,7 @@ func (c KtCloudClient) WaitForVirtualMachineState(zoneId string, vmId string, wa
 		}
 	}()
 
-	log.Printf("# Waiting for up to %f seconds for VM state to converge", timeOut.Seconds())
+	cblogger.Infof("# Waiting for up to %f seconds for VM state to converge", timeOut.Seconds())
 	select {
 	case err := <-result:
 		return err
